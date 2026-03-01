@@ -1,0 +1,912 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ingram Cookbook</title>
+<meta name="ingram-cookbook" content="yes">
+<meta name="ingram-cookbook" content="default">
+<style>
+:root {
+  --bg: #faf7f2;         
+  --card: #ffffff;        
+  --text: #2e2e2e;        
+  --muted: #7a7a7a;      
+  --chip: #f0ede6;        
+  --chipOn: #a3b18a;      
+  --border: rgba(0,0,0,.08); 
+  --shadow: 0 6px 18px rgba(0,0,0,.12); 
+  --accent: #8c3f2f;     
+  --danger: #c4492d;     
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f5f6fb;
+    --card: #ffffff;
+    --text: #0b1220;
+    --muted: #556070;
+    --chip: #eef1f7;
+    --chipOn: #2a67ff;
+    --border: rgba(10,18,32,.10);
+    --shadow: 0 10px 30px rgba(10,18,32,.10);
+  }
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.35;
+}
+a { color: var(--accent); text-decoration: none; }
+a:active { opacity: .7; }
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  border-bottom: 1px solid var(--border);
+}
+.container {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 14px 14px 40px;
+}
+.titleRow {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0 10px;
+}
+h1 {
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: .2px;
+}
+.small {
+  color: var(--muted);
+  font-size: 12px;
+}
+.controls {
+  display: grid;
+  gap: 10px;
+}
+.searchRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+input[type="search"] {
+  width: 100%;
+  padding: 12px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  outline: none;
+  font-size: 16px;
+}
+button {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  padding: 11px 12px;
+  border-radius: 14px;
+  font-size: 14px;
+  cursor: pointer;
+}
+button.primary {
+  background: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 70%, var(--border));
+  color: white;
+}
+button.danger {
+  background: color-mix(in srgb, var(--danger) 85%, var(--card));
+  border-color: color-mix(in srgb, var(--danger) 70%, var(--border));
+  color: white;
+}
+button:active { transform: translateY(1px); }
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chip {
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--chip);
+  color: var(--text);
+  font-size: 13px;
+  user-select: none;
+}
+.chip[data-on="true"] {
+  background: var(--chipOn);
+  border-color: color-mix(in srgb, var(--chipOn) 70%, var(--border));
+  color: #fff;
+}
+.metaRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.grid {
+  margin-top: 14px;
+  display: grid;
+  gap: 12px;
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+summary {
+  list-style: none;
+  cursor: pointer;
+}
+summary::-webkit-details-marker { display:none; }
+.cardTop {
+  padding: 14px 14px 12px;
+  display: grid;
+  gap: 8px;
+}
+.cardTitle {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.name {
+  font-weight: 700;
+  font-size: 16px;
+}
+.sub {
+  color: var(--muted);
+  font-size: 12px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.badge {
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--card) 70%, transparent);
+}
+.cardBody {
+  padding: 0 14px 14px;
+  border-top: 1px solid var(--border);
+}
+.section {
+  padding-top: 12px;
+}
+.section h3 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+ul, ol {
+  margin: 0 0 0 18px;
+  padding: 0;
+}
+li { margin: 6px 0; }
+.subheader {
+  margin: 10px 0 6px;
+  font-weight: 700;
+}
+.rowBtns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+hr.sep {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 12px 0 0;
+}
+dialog {
+  width: min(920px, calc(100% - 18px));
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--card);
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+dialog::backdrop {
+  background: rgba(0,0,0,.5);
+}
+.form {
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+}
+.form h2 {
+  margin: 0 0 4px;
+  font-size: 16px;
+}
+.field {
+  display: grid;
+  gap: 6px;
+}
+label {
+  font-size: 12px;
+  color: var(--muted);
+}
+input[type="text"], textarea {
+  width: 100%;
+  padding: 12px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--card) 90%, #0000);
+  color: var(--text);
+  font-size: 16px;
+  outline: none;
+}
+textarea { min-height: 90px; resize: vertical; }
+.hint {
+  font-size: 12px;
+  color: var(--muted);
+}
+.footerBtns {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  background: color-mix(in srgb, var(--card) 90%, #0000);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 10px 14px;
+  box-shadow: var(--shadow);
+  display: none;
+  font-size: 13px;
+}
+.toast.show { display: block; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="container">
+    <div class="titleRow">
+      <div>
+        <h1>Ingram Cookbook</h1>
+        <div class="small"></div>
+      </div>
+      <button class="primary" id="btnAdd">Add</button>
+    </div>
+
+    <div class="controls">
+      <div class="searchRow">
+        <input id="q" type="search" placeholder="Search recipes, ingredients, steps…" autocomplete="off" />
+        <button id="btnReset">Reset</button>
+      </div>
+
+      <div class="chips" id="tagChips" aria-label="Tag filters"></div>
+
+      <div class="metaRow">
+        <div class="small" id="resultsMeta"></div>
+        <div class="rowBtns">
+          <button id="btnExport">Export</button>
+          <button id="btnImport">Import</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="grid" id="list"></div>
+</div>
+
+<dialog id="dlg">
+  <form method="dialog" class="form" id="recipeForm">
+    <h2 id="dlgTitle">Add recipe</h2>
+
+    <div class="field">
+      <label for="fName">Name</label>
+      <input id="fName" type="text" required placeholder="e.g., Chicken Alfredo Bake" />
+    </div>
+
+    <div class="field">
+      <label for="fTags">Tags (comma-separated)</label>
+      <input id="fTags" type="text" placeholder="e.g., Holiday, Dessert, Weeknight" />
+    </div>
+
+    <div class="field">
+      <label for="fYield">Servings / Yield</label>
+      <input id="fYield" type="text" placeholder="e.g., 6 servings" />
+    </div>
+
+    <div class="field">
+      <label for="fSource">Source URL (optional)</label>
+      <input id="fSource" type="text" placeholder="https://…" />
+    </div>
+
+    <div class="field">
+      <label for="fDesc">Description (optional)</label>
+      <textarea id="fDesc" placeholder="Short notes about the recipe…"></textarea>
+    </div>
+
+    <div class="field">
+      <label for="fIngredients">Ingredients (one per line)</label>
+      <textarea id="fIngredients" required placeholder="2 cups flour&#10;1 tsp salt&#10;…"></textarea>
+      <div class="hint">Tip: Use lines like “Topping:” to create subheaders (it will render bold).</div>
+    </div>
+
+    <div class="field">
+      <label for="fSteps">Steps (one per line)</label>
+      <textarea id="fSteps" required placeholder="Preheat oven to 350&#10;Mix ingredients&#10;Bake 30 minutes"></textarea>
+      <div class="hint">Tip: Use lines like “For sauce:” to create subheaders.</div>
+    </div>
+
+    <div class="field">
+      <label for="fNotes">Notes (optional, one per line)</label>
+      <textarea id="fNotes" placeholder="Freezes well&#10;Add extra garlic"></textarea>
+    </div>
+
+    <input type="hidden" id="fId" />
+
+    <div class="footerBtns">
+      <button type="button" id="btnCancel">Cancel</button>
+      <button type="submit" class="primary" id="btnSave">Save</button>
+    </div>
+
+    <div class="hint">
+      Added/edited recipes are saved on this device using local storage. Use <b>Export</b> to back them up or move to another phone.
+    </div>
+  </form>
+</dialog>
+
+<dialog id="dlgImport">
+  <form method="dialog" class="form" id="importForm">
+    <h2>Import recipes</h2>
+    <div class="hint">Paste the JSON from Export. This will merge into your current list.</div>
+    <div class="field">
+      <label for="importText">JSON</label>
+      <textarea id="importText" placeholder='[{"name":"…"}]'></textarea>
+    </div>
+    <div class="footerBtns">
+      <button type="button" id="btnImportCancel">Cancel</button>
+      <button type="submit" class="primary">Import</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const BASE = [{"id": "sweet-potato-souffle", "name": "Sweet Potato Souffle", "tags": ["Holiday"], "rating": 5.0, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "4 large sweet potatoes"}, {"type": "item", "text": "3 eggs"}, {"type": "item", "text": "1 stick butter"}, {"type": "item", "text": "1 teaspoon vanilla extract"}, {"type": "item", "text": "⅔ cup brown sugar"}, {"type": "item", "text": "1 teaspoon cinnamon"}, {"type": "item", "text": "½ can condensed milk"}, {"type": "item", "text": "Milk"}, {"type": "subheader", "text": "Topping:"}, {"type": "item", "text": "1½ cups pecans"}, {"type": "item", "text": "4 cups corn flakes"}, {"type": "item", "text": "1 stick butter"}], "steps": [{"type": "step", "text": "Boil potatoes with water and milk, drain"}, {"type": "step", "text": "Combine all ingredients in blender. Put in baking dish."}, {"type": "step", "text": "Add topping."}, {"type": "step", "text": "Bake at 375 45 minutes or until brown.*"}], "notes": []}, {"id": "swedish-oatmeal-cookies", "name": "Swedish Oatmeal Cookies", "tags": ["Holiday"], "rating": 5.0, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1 cup softened butter"}, {"type": "item", "text": "1 cup softened margerine"}, {"type": "item", "text": "2 cups sugar"}, {"type": "item", "text": "1 egg"}, {"type": "item", "text": "2 cups sifted flour"}, {"type": "item", "text": "1 teaspoon baking soda"}, {"type": "item", "text": "¼ teaspoon salt"}, {"type": "item", "text": "4 cups minute oats"}, {"type": "item", "text": "powdered sugar"}], "steps": [{"type": "step", "text": "Cream together butter, margerine, and sugar."}, {"type": "step", "text": "Add remaining ingredients."}, {"type": "step", "text": "Line pan with aluminum foil, lightly greased."}, {"type": "step", "text": "Drop dough by half teaspoonfuls on cookie sheet."}, {"type": "step", "text": "Flatten with fork dipped in cold water."}, {"type": "step", "text": "Bake at 350 for 10 minutes.*"}, {"type": "step", "text": "Top with powdered sugar."}], "notes": []}, {"id": "dressing", "name": "Dressing", "tags": ["Holiday"], "rating": 5.0, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "subheader", "text": "Cornbread:"}, {"type": "item", "text": "4 cups cornmeal"}, {"type": "item", "text": "3 cups buttermilk"}, {"type": "item", "text": "3 eggs"}, {"type": "item", "text": "4 medium onions"}, {"type": "item", "text": "8 hardboiled eggs"}, {"type": "item", "text": "2 teaspoons salt"}, {"type": "item", "text": "2 teaspoons sage"}, {"type": "item", "text": "turkey stock"}, {"type": "item", "text": "Two containers chicken broth"}], "steps": [{"type": "step", "text": "Add chicken broth to turkey stock, let boil"}, {"type": "step", "text": "Crumble cornbread into large bowl"}, {"type": "step", "text": "Add remianing dry ingredients"}, {"type": "step", "text": "Add stock to bowl until mushy"}, {"type": "step", "text": "Bake at 375 for 1 hour until brown*"}], "notes": []}, {"id": "pumpkin-pie", "name": "Pumpkin Pie", "tags": ["Holiday"], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1 can pumpkin"}, {"type": "item", "text": "1 can sweetened condensed milk"}, {"type": "item", "text": "4 eggs"}, {"type": "item", "text": "2 teaspoons ground cinnamon"}, {"type": "item", "text": "1 teaspoon ground ginger"}, {"type": "item", "text": "1 teaapoon ground nutmeg (can sub with 3½ teaspoons pumpkin pie spice)"}, {"type": "item", "text": "1 teaspoon salt"}, {"type": "item", "text": "2 9 inch unbaked pie crusts"}], "steps": [{"type": "step", "text": "Combine ingredients"}, {"type": "step", "text": "Pour into pie crusts"}, {"type": "step", "text": "Bake at 425 for 15 minutes*"}, {"type": "step", "text": "Then 350 for 30-35 minutes or until knife comes out clean*"}], "notes": []}, {"id": "roast", "name": "Roast", "tags": [], "rating": 5.0, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "3 pound roast"}, {"type": "item", "text": "onion soup mix"}, {"type": "item", "text": "2 big cans cream of chicken"}], "steps": [{"type": "step", "text": "Put roast in crockpot"}, {"type": "step", "text": "Sprinkle one package onion soup mix"}, {"type": "step", "text": "Pour in cream of chicken"}, {"type": "step", "text": "Add other package onion soup mix"}, {"type": "step", "text": "Cook on low 8 hours"}], "notes": []}, {"id": "country-style-ribs", "name": "Country Style Ribs", "tags": [], "rating": 5.0, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "12 boneless country style ribs"}, {"type": "item", "text": "½ bottle liquid smoke"}, {"type": "item", "text": "3 cups ketchup"}, {"type": "item", "text": "1 cup brown sugar"}, {"type": "item", "text": "1 cup water"}, {"type": "item", "text": "2 tablespoons worcestershire sauce"}, {"type": "item", "text": "2 tablespoons mustard"}], "steps": [{"type": "step", "text": "Put ribs in roaster pan on their sides (i just use a 9x13 baking dish)"}, {"type": "step", "text": "Mix remaining ingredients, pour over ribs"}, {"type": "step", "text": "Cover with aluminum foil"}, {"type": "step", "text": "Bake at 350 for 2 hours*"}, {"type": "step", "text": "Uncover and bake additional 30 minutes"}], "notes": []}, {"id": "potato-soup", "name": "Potato Soup", "tags": [], "rating": 5.0, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "several potatoes"}, {"type": "item", "text": "1 onion"}, {"type": "item", "text": "1 stick butter"}, {"type": "item", "text": "milk"}], "steps": [{"type": "step", "text": "Cut up potatoes into pot"}, {"type": "step", "text": "Cut up onion into pot"}, {"type": "step", "text": "Add water, just enough to cover"}, {"type": "step", "text": "Boil until soft"}, {"type": "step", "text": "Add milk, until it looks right"}, {"type": "step", "text": "Add butter"}, {"type": "step", "text": "Pepper and salt to taste"}], "notes": []}, {"id": "green-chili-enchiladas", "name": "Green Chili Enchiladas", "tags": [], "rating": 5.0, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1½-2 pounds chicken"}, {"type": "item", "text": "corn tortillas"}, {"type": "item", "text": "3 big cans cream of chicken"}, {"type": "item", "text": "1 pound shredded cheese (cheddar and colby or monterey)"}, {"type": "item", "text": "2 cans green chiles"}, {"type": "item", "text": "1 onion"}, {"type": "item", "text": "jalapeños"}], "steps": [{"type": "step", "text": "Cook chicken"}, {"type": "step", "text": "Mix all ingredients (half the cheese) except tortillas"}, {"type": "step", "text": "Fill tortilla and roll"}, {"type": "step", "text": "Place in baking dish and layer"}, {"type": "step", "text": "Add leftover mix to top"}, {"type": "step", "text": "Cook covered at 350 for 30 minutes*"}, {"type": "step", "text": "Uncover and cook additional 30 minutes until bubbly"}], "notes": []}, {"id": "easy-sugar-cookies", "name": "Easy Sugar Cookies", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "2¾ cups all purpose flour"}, {"type": "item", "text": "1 teaspoon baking soda"}, {"type": "item", "text": "½ teaspoon baking powder"}, {"type": "item", "text": "1 cup softened butter"}, {"type": "item", "text": "1½ cups sugar"}, {"type": "item", "text": "1 egg"}, {"type": "item", "text": "1 teaspoon vanilla extract"}], "steps": [{"type": "step", "text": "Preheat oven to 375*"}, {"type": "step", "text": "In small bowl stir together flour, baking soda, and baking powder"}, {"type": "step", "text": "In large bowl cream together butter and sugar until smooth"}, {"type": "step", "text": "Beat in egg and vanilla"}, {"type": "step", "text": "Gradually blend in dry ingredients"}, {"type": "step", "text": "Roll rounded teapoonfuls into balls onto ungreased cookie sheet"}, {"type": "step", "text": "Bake 8-10 minutes"}], "notes": []}, {"id": "chicken-and-broccoli-casserole", "name": "Chicken and Broccoli Casserole", "tags": [], "rating": 5.0, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1½-2 pounds chicken"}, {"type": "item", "text": "broccoli florets"}, {"type": "item", "text": "1 big can cream of chicken soup"}, {"type": "item", "text": "1 small can cream of chicken soup"}, {"type": "item", "text": "2-3 tablespoons curry powder"}, {"type": "item", "text": "2 tablespoons mayo"}, {"type": "item", "text": "1 tablespoon lemon juice"}, {"type": "item", "text": "4 cups shredded cheese"}, {"type": "item", "text": "milk"}, {"type": "item", "text": "1 stick of butter"}, {"type": "item", "text": "bread"}], "steps": [{"type": "step", "text": "Cook chicken and cut into pieces"}, {"type": "step", "text": "Boil broccoli until tender"}, {"type": "step", "text": "Mix soup, curry, mayo, lemon juice, and milk in bowl"}, {"type": "step", "text": "Layer 9x13 dish with broccoli, chicken, curry mix"}, {"type": "step", "text": "Add cheese"}, {"type": "step", "text": "Crumble bread on top"}, {"type": "step", "text": "Add butter"}, {"type": "step", "text": "Bake at 350 for 1hour until cheese is bubbly*"}], "notes": []}, {"id": "chicken-and-broccoli-stuffed-shells", "name": "Chicken and Broccoli Stuffed Shells", "tags": [], "rating": 5.0, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1 jar (16 oz) alfredo sauce"}, {"type": "item", "text": "2 cups cooked chicken, shredded"}, {"type": "item", "text": "2 cups cooked broccoli, chopped"}, {"type": "item", "text": "1 cup shredded cheddar (or mozzarella) cheese"}, {"type": "item", "text": "¼ cup shredded parmesan"}, {"type": "item", "text": "21 jumbo pasta shells, cooked"}, {"type": "item", "text": "1½ - 2 cups spaghetti sauce (optional, but I love the combination of alfredo with tomato sauce!)"}, {"type": "item", "text": "Salt/Pepper to season (if needed)"}], "steps": [{"type": "step", "text": "Pre-heat oven to 350*"}, {"type": "step", "text": "In a large bowl, mix alfredo, chicken, broccoli, and cheeses"}, {"type": "step", "text": "Spoon mixture into pasta shells"}, {"type": "step", "text": "Grease 13 x 9 baking dish with butter or cooking spray"}, {"type": "step", "text": "Evenly spread spaghetti sauce on bottom of baking dish"}, {"type": "step", "text": "Arrange shells in baking pan"}, {"type": "step", "text": "Cover with foil and bake 35 minutes until heated through"}], "notes": []}, {"id": "peach-cobbler", "name": "Peach Cobbler", "tags": [], "rating": null, "sourceUrl": "http://www.foodnetwork.com/recipes/paula-deen/peach-cobbler-recipe.html", "image": "images/peach_cobbler_btt7o.jpg", "yield": "8 to 10 servings", "description": "", "ingredients": [{"type": "item", "text": "4 cups peeled, sliced peaches"}, {"type": "item", "text": "2 cups sugar, divided"}, {"type": "item", "text": "½ cup water"}, {"type": "item", "text": "8 tablespoons butter"}, {"type": "item", "text": "1½ cups self-rising flour"}, {"type": "item", "text": "1½ cups milk"}, {"type": "item", "text": "Ground cinnamon, optional"}], "steps": [{"type": "step", "text": "Preheat oven to 350*"}, {"type": "step", "text": "Combine the peaches, 1 cup sugar, and water in a saucepan and mix well. Bring to a boil and simmer for 10 minutes. Remove from the heat"}, {"type": "step", "text": "Put the butter in a 3-quart baking dish and place in oven to melt"}, {"type": "step", "text": "Mix remaining 1 cup sugar, flour, and milk slowly to prevent clumping. Pour mixture over melted butter. Do not stir. Spoon fruit on top, gently pouring in syrup. Sprinkle top with ground cinnamon, if using. Batter will rise to top during baking. Bake for 30 to 45 minutes"}, {"type": "step", "text": "To serve, scoop onto a plate and serve with your choice of whipped cream or vanilla ice cream"}], "notes": []}, {"id": "box-cake-mix-tweaks", "name": "Box cake mix tweaks", "tags": [], "rating": 5.0, "sourceUrl": null, "image": null, "yield": null, "description": "Make box cake mix taste like it came from a bakery", "ingredients": [{"type": "item", "text": "Egg"}, {"type": "item", "text": "Butter"}, {"type": "item", "text": "Milk"}, {"type": "item", "text": "Vanilla Extract"}], "steps": [{"type": "step", "text": "Add 1 more egg than called for."}, {"type": "step", "text": "Double amount of oil, and use butter instead."}, {"type": "step", "text": "Use milk instead of water."}, {"type": "step", "text": "Teaspoon vanilla"}], "notes": []}, {"id": "cheesecake", "name": "Cheesecake", "tags": [], "rating": 5.0, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "subheader", "text": "Crust:"}, {"type": "item", "text": "1½ Cups graham cracker crumbs"}, {"type": "item", "text": "5 tbsp sugar"}, {"type": "item", "text": "⅓ Cup melted butter"}, {"type": "subheader", "text": "Filling:"}, {"type": "item", "text": "3 (8oz) blocks cream cheese, softened"}, {"type": "item", "text": "1½ Cups sugar"}, {"type": "item", "text": "4 eggs, separated"}, {"type": "item", "text": "1 tbsp lemon juice"}, {"type": "item", "text": "1 tsp vanilla"}], "steps": [{"type": "step", "text": "Preheat oven to 325 degrees"}, {"type": "step", "text": "Crust: combine all ingredients and press against sides and bottom of 9 inch springform pan."}, {"type": "step", "text": "Filling: mix together cream cheese, sugar, 4 egg yolks, lemon juice, and vanilla."}, {"type": "step", "text": "In another bowl, beat 4 egg whites until stiff. Fold egg whites into cream cheese mixture. Pour onto crust in pan."}, {"type": "step", "text": "Bake for 35 minutes. Turn off oven and leave cheesecake in oven for another hour with the door closed."}, {"type": "step", "text": "Freeze several hours before serving. Remove from freezer and pan before thawing."}], "notes": []}, {"id": "coconut-cream-poke-cake", "name": "Coconut Cream Poke Cake", "tags": [], "rating": 5.0, "sourceUrl": "https://www.thecountrycook.net/coconut-cream-poke-cake/", "image": "images/coconut_cream_poke_cake_o8qx0.jpg", "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1 box white cake mix"}, {"type": "item", "text": "ingredients needed to make cake (egg whites, oil & water)"}, {"type": "item", "text": "1 (15 oz) can cream of coconut"}, {"type": "item", "text": "1 (8 oz) container COOL WHIP, thawed"}, {"type": "item", "text": "1 (8 oz) package sweetened flaked coconut"}, {"type": "item", "text": "The original recipe also called for a small can of sweetened condensed milk.  I have since found that it really isn’t necessary in this cake. It is already plenty sweet and creamy with just the cream of coconut, but if you’d like, you can certainly add it to your recipe."}, {"type": "item", "text": "You want to use Cream of Coconut – not coconut milk. Cream of Coconut can usually be found in the alcohol aisle of your grocery store.  It tends to be near all the margarita mixes. My local Walmart doesn’t currently carry it but I am able to find it at Kroger. When you open the can, you will need to give it a good stir because the cream part tends to separate from the liquid."}], "steps": [{"type": "step", "text": "Prepare and bake white cake mix according to package directions for a 9×13 pan. Remove cake from oven, and while still hot, poke holes all over the top of cake using a large fork."}, {"type": "step", "text": "Make sure you evenly coat the whole cake and spread it around so it will soak in. Let cake cool completely then frost with whipped topping."}, {"type": "step", "text": "Then top with flaked coconut. If you like you can toast your coconut first but we prefer it untoasted."}, {"type": "step", "text": "Keep cake refrigerated. I think this cake tastes best after it has cooled for at least a couple of hours. It gives it time for the coconut flavors to really soak in."}], "notes": []}, {"id": "chocolate-frosting", "name": "Chocolate Frosting", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "Homemade chocolate frosting", "ingredients": [{"type": "item", "text": "⅓ Cup butter"}, {"type": "item", "text": "⅔ Cup cocoa"}, {"type": "item", "text": "2⅔ Cups powdered sugar"}, {"type": "item", "text": "⅓ Milk"}, {"type": "item", "text": "1 tsp vanilla"}], "steps": [{"type": "step", "text": "Melt butter in small sauce pan over low heat. Add cocoa, stir until smooth and thick. Remove from heat into medium bowl. Let cool slightly."}, {"type": "step", "text": "Add milk and vanilla alternately with powdered sugar and whisk until desired consistency."}], "notes": []}, {"id": "cream-cheese-sausage-balls", "name": "Cream Cheese Sausage Balls", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1 pound hot sausage (or other preferred sausage)"}, {"type": "item", "text": "8 ounces cream cheese"}, {"type": "item", "text": "1¼ cups Bisquick"}, {"type": "item", "text": "4 ounces cheddar cheese, shredded"}], "steps": [{"type": "step", "text": "Preheat oven to 400°"}, {"type": "step", "text": "Mix all ingredients until well combined"}, {"type": "step", "text": "Roll into one inch balls"}, {"type": "step", "text": "Bake for 20-25 minutes, or until brown"}], "notes": ["Balls can be frozen. Add a few extra minutes to cook time if frozen"]}, {"id": "slow-cooker-pulled-pork", "name": "Slow Cooker Pulled Pork", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": "8", "description": "", "ingredients": [{"type": "item", "text": "2½ pound boneless pork loin roast"}, {"type": "item", "text": "2 teaspoon red wine vinegar"}, {"type": "item", "text": "2 teaspoon hickory liquid smoke"}, {"type": "item", "text": "1 teaspoon garlic powder"}, {"type": "item", "text": "Salt"}, {"type": "item", "text": "1 cup Kansas City bbq sauce"}], "steps": [{"type": "step", "text": "Place pork, vinegar, liquid smoke, garlic, and salt in crockpot"}, {"type": "step", "text": "Cook on high 6 hours"}, {"type": "step", "text": "Remove pork and reserve liquid in cup"}, {"type": "step", "text": "Shred pork and put back into crockpot with ¾ cup of reserved liquid and bbq sauce"}, {"type": "step", "text": "Cook on high one more hour"}], "notes": []}, {"id": "buffalo-chicken-lettuce-wraps", "name": "Buffalo Chicken Lettuce Wraps", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1½ pounds chicken breast"}, {"type": "item", "text": "1 celery stalk"}, {"type": "item", "text": "½ onion, diced"}, {"type": "item", "text": "1 clove garlic"}, {"type": "item", "text": "16 ounce low sodium chicken broth"}, {"type": "item", "text": "½ cup hot cayenne pepper sauce (Frank's)"}, {"type": "subheader", "text": "For wraps:"}, {"type": "item", "text": "6 large lettuce leaves"}, {"type": "item", "text": "Carrot and celery matchsticks (optional)"}], "steps": [{"type": "step", "text": "In slow cooker combine chicken, onion, celery stalk, garlic, and broth (enough to cover chicken)"}, {"type": "step", "text": "Cook on high for 4 hours"}, {"type": "step", "text": "Shred chicken and reserve ½ cup broth"}, {"type": "step", "text": "Put chicken back in pot with broth and hot sauce"}, {"type": "step", "text": "Cook 30 more minutes"}], "notes": []}, {"id": "million-dollar-spaghetti", "name": "Million Dollar Spaghetti", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1 (16oz) package spaghetti pasta"}, {"type": "item", "text": "1 pound ground beef"}, {"type": "item", "text": "1 pound ground sausage"}, {"type": "item", "text": "1 (16oz) jar spaghetti sauce"}, {"type": "item", "text": "½ cup butter, divided"}, {"type": "item", "text": "1 cup cottage cheese"}, {"type": "item", "text": "1 (8oz) package cream cheese, softened"}, {"type": "item", "text": "¼ cup sour cream"}, {"type": "item", "text": "1 (8oz) package mozzarella cheese"}], "steps": [{"type": "step", "text": "Preheat oven to 350"}, {"type": "step", "text": "Cook pasta to al dente"}, {"type": "step", "text": "Cook beef and sausage, then add sauce"}, {"type": "step", "text": "Combine cream cheese, cottage cheese and sour cream"}, {"type": "step", "text": "Place half the butter in bottom of 13x9 dish"}, {"type": "step", "text": "Layer half the pasta in dish, cheese mixture, remaining pasta, remaining butter, meat with sauce"}, {"type": "step", "text": "Bake 30 minutes"}, {"type": "step", "text": "Add mozzarella and bake additional 15 minutes"}], "notes": []}, {"id": "reese-s-poke-cake", "name": "Reese's Poke Cake", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1 box chocolate cake mix"}, {"type": "item", "text": "1 (8oz) package cream cheese"}, {"type": "item", "text": "1 (14oz) sweetened condensed milk"}, {"type": "item", "text": "1 cup creamy peanut butter"}, {"type": "item", "text": "1 (12oz) package cool whip"}, {"type": "item", "text": "1 (12oz) container fudge"}, {"type": "item", "text": "Peanut butter cups"}], "steps": [{"type": "step", "text": "Prepare box cake mix, poke holes while still warm"}, {"type": "step", "text": "Microwave hot fudge, pour ¾ jar over warm cake"}, {"type": "step", "text": "Combine cream cheese and condensed milk until smooth. Add peanut butter. Add half the cool whip"}, {"type": "step", "text": "Spread mixture over cooled cake. Cover and refrigerate"}, {"type": "step", "text": "Spread remaining cool whip and drizzle remaining fudge. Add crumbled peanut butter cups"}], "notes": []}, {"id": "strawberries-and-cream-poke-cake", "name": "Strawberries and Cream Poke Cake", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1 box strawberry cake mix"}, {"type": "item", "text": "1 jar strawberry ice cream topping"}, {"type": "item", "text": "1 can sweetened condensed milk"}, {"type": "item", "text": "1 cup chopped strawberries"}, {"type": "item", "text": "1 container cool whip"}], "steps": [{"type": "step", "text": "Bake cake in 9x13 dish. Poke holes while still warm."}, {"type": "step", "text": "Mix condensed milk and strawberry sauce. Pour over cake. Cool completely"}, {"type": "step", "text": "Sprinkle strawberries over cake"}, {"type": "step", "text": "Spread cool whip over cake"}], "notes": []}, {"id": "pink-stuff", "name": "Pink Stuff", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1 jar marshmallow cream"}, {"type": "item", "text": "1 (8oz) package cream cheese"}, {"type": "item", "text": "1 package strawberry (or any other flavor) Jello"}, {"type": "item", "text": "3-4 drops lemon juice"}], "steps": [{"type": "step", "text": "Mix marshmallow cream and cream cheese"}, {"type": "step", "text": "Sprinkle little amount of jello and add lemon juice"}, {"type": "step", "text": "Refrigerate before serving"}], "notes": []}, {"id": "sausage-gravy", "name": "Sausage Gravy", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1 pound pork breakfast sausage"}, {"type": "item", "text": "½ cup butter, sausage (or bacon) fat, or vegetable/canola oil"}, {"type": "item", "text": "¼ cup all purpose flour"}, {"type": "item", "text": "3-4 cups whole milk (more or less as desired)"}, {"type": "item", "text": "Salt"}, {"type": "item", "text": "Pepper"}], "steps": [{"type": "step", "text": "Brown sausage in pan"}, {"type": "step", "text": "Stir in butter, fat, or oil"}, {"type": "step", "text": "Sprinkle in flour"}, {"type": "step", "text": "Cook for five minutes, stirring often"}, {"type": "step", "text": "Slowly whisk in two cups milk. Stir until it starts to bubble. Gravy will be thick"}, {"type": "step", "text": "Add more milk to desired consistency"}], "notes": []}, {"id": "biscuits", "name": "Biscuits", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "2 cups all purpose flour"}, {"type": "item", "text": "1 tsp salt"}, {"type": "item", "text": "1 tsp sugar"}, {"type": "item", "text": "1 tbsp baking powder"}, {"type": "item", "text": "1 stick COLD butter (plus more for skillet)"}, {"type": "item", "text": "¾ cups plus 1 tbsp milk"}], "steps": [{"type": "step", "text": "Preheat oven to 425°"}, {"type": "step", "text": "Add together dry ingredients. Mix well"}, {"type": "step", "text": "Add stick of butter. Cut with pastry cutter. It will look grainy"}, {"type": "step", "text": "Add milk"}, {"type": "step", "text": "When dough turns to a ball, turn out onto floured counter"}, {"type": "step", "text": "Knead dough until no longer sticky. Do not overwork. Only a few turns Is necessary"}, {"type": "step", "text": "Roll out to about ½ inch thick"}, {"type": "step", "text": "Cut rounds and place in well buttered iron skillet"}, {"type": "step", "text": "They can touch. Smear butter on top"}, {"type": "step", "text": "Cook for 18-20 minutes until golden"}], "notes": []}, {"id": "cream-cheese-buttercream-frosting", "name": "Cream Cheese Buttercream Frosting", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1 package (8oz) cream cheese"}, {"type": "item", "text": "1 stick (½ cup) butter"}, {"type": "item", "text": "4 cups powdered sugar"}, {"type": "item", "text": "1 tsp vanilla"}], "steps": [{"type": "step", "text": "Combine all ingredients in bowl."}, {"type": "step", "text": "Store in refrigerator for two weeks or freeze for two months"}], "notes": []}, {"id": "cheese-straws", "name": "Cheese Straws", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "3 (10 oz) bricks of sharp cheddar cheese, room temperature"}, {"type": "item", "text": "1 cup butter, softened"}, {"type": "item", "text": "4 cups all purpose flour, sifted"}, {"type": "item", "text": "2 teaspoons salt"}, {"type": "item", "text": "⅛ teaspoon black pepper"}, {"type": "item", "text": "⅛ teaspoon cayenne pepper"}, {"type": "item", "text": "Dash of garlic powder"}], "steps": [{"type": "step", "text": "Preheat oven to 325°"}, {"type": "step", "text": "Put softened cheese and butter in bowl. Beat with heavy duty attachments until consistency of whipped cream, about 30 minutes"}, {"type": "step", "text": "On sheet of wax paper, sift together remaining ingredients."}, {"type": "step", "text": "Slowly add flour mixture to cheese mixture by large spoonfuls. Beat well after each addition. Add until dough is somewhat stiff but soft enough to squeeze through cookie press. May not need all the flour"}, {"type": "step", "text": "Lightly spray cookie sheet with cooking spray. Using star shape cookie tip, press dough out in long strips that run the length of the pan"}, {"type": "step", "text": "Bake for 20 minutes. Cut to desired size. Cool completely and store in airtight container"}], "notes": []}, {"id": "giblet-gravy", "name": "Giblet Gravy", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "Chicken livers"}, {"type": "item", "text": "6 cups stock (boiled turkey parts, strained. Add chicken stock to make 6 cups)"}, {"type": "item", "text": "6 boiled eggs"}, {"type": "item", "text": "Turkey drippings"}, {"type": "item", "text": "Turkey neck- boiled"}, {"type": "item", "text": "4 cups milk"}, {"type": "item", "text": "1 stick butter"}, {"type": "item", "text": "Salt"}, {"type": "item", "text": "Pepper"}, {"type": "item", "text": "10 tablespoons flour"}, {"type": "item", "text": "½ cup water"}], "steps": [{"type": "step", "text": "Boil livers, neck and gizzards"}, {"type": "step", "text": "Add stock and eggs"}, {"type": "step", "text": "Cut up turkey parts and add"}, {"type": "step", "text": "Add milk"}, {"type": "step", "text": "Add butter"}, {"type": "step", "text": "Mix water and flour to create slurry. Add to pot"}], "notes": []}, {"id": "god-o-mighty-dip", "name": "God-O-Mighty Dip", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "3-4 Avocados"}, {"type": "item", "text": "1 teaspoon mayo"}, {"type": "item", "text": "1 teaspoon lemon juice"}, {"type": "item", "text": "3-4 Tomatoes"}, {"type": "item", "text": "Green onions"}, {"type": "item", "text": "1 pound medium/sharp cheddar cheese"}, {"type": "item", "text": "1 pound sour cream"}, {"type": "item", "text": "1 packet of taco seasoning"}, {"type": "item", "text": "Jar of salsa"}], "steps": [{"type": "step", "text": "Peel avocados and mash into paste"}, {"type": "step", "text": "Add mayo and lemon juice and spread into bottom of dish"}, {"type": "step", "text": "Mix sour cream and taco seasoning. Add ¾ salsa. Pour on top of avocado mixture"}, {"type": "step", "text": "Add all of the cheese onto sour cream mixture"}, {"type": "step", "text": "Chop green onions and tomatoes and put on top of cheese"}, {"type": "step", "text": "Season with salt, pepper and garlic"}], "notes": []}, {"id": "cheese-dip", "name": "Cheese Dip", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1 pound ground beef"}, {"type": "item", "text": "1 jar of salsa"}, {"type": "item", "text": "1 large package of velveeta cheese"}], "steps": [{"type": "step", "text": "Cook beef"}, {"type": "step", "text": "Melt velveeta"}, {"type": "step", "text": "Add all ingredients together"}, {"type": "step", "text": "Customizable! Can add jalapeño, onion, use chicken instead of beef, etc."}], "notes": []}, {"id": "peanut-butter-balls", "name": "Peanut Butter Balls", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1½ cups creamy peanut butter"}, {"type": "item", "text": "½ cup butter, softened"}, {"type": "item", "text": "1 teaspoon vanilla"}, {"type": "item", "text": "2 cups powdered sugar (3 cups if desired)"}, {"type": "item", "text": "12 oz bag of chocolate chips"}, {"type": "item", "text": "2 tablespoons coconut oil"}], "steps": [{"type": "step", "text": "Mix pb, butter and vanilla in bowl. Add powdered sugar 1 cup at a time. Will be thick and difficult to stir."}, {"type": "step", "text": "Line pan with wax paper. Roll mixture into 1 inch balls onto pan. Place in the freezer while preparing next step"}, {"type": "step", "text": "Melt chocolate and oil in double boiler"}, {"type": "step", "text": "Drop balls one at a time in chocolate and place back on wax paper. Put in fridge to harden."}], "notes": []}, {"id": "bread-machine-white-bread", "name": "Bread Machine White Bread", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "2 pound loaf", "ingredients": [{"type": "item", "text": "¾ cup warm milk (heat to 80 degrees in microwave)"}, {"type": "item", "text": "¼ cup warm water (same as milk)"}, {"type": "item", "text": "1 egg"}, {"type": "item", "text": "2 tablespoons sugar"}, {"type": "item", "text": "1 teaspoon salt"}, {"type": "item", "text": "2¾ cups bread flour (or all purpose)"}, {"type": "item", "text": "2 tablespoons salted butter, softened (can use unsalted but add more salt in previous step)"}, {"type": "item", "text": "2 teaspoons active dry yeast (make well in flour, do not let yeast touch liquid)"}], "steps": [{"type": "step", "text": "Add ingredients in order they are listed into bread machine"}, {"type": "step", "text": "Set machine to basic"}], "notes": []}, {"id": "gooey-cinnamon-buns-with-cream-cheese-icing", "name": "Gooey Cinnamon Buns with Cream Cheese Icing", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": "12", "description": "", "ingredients": [{"type": "subheader", "text": "Dough:"}, {"type": "item", "text": "1 package (2 ¼ teaspoons) active dry yeast"}, {"type": "item", "text": "3 cups all purpose flour, plus more for dusting work surface"}, {"type": "item", "text": "2 tablespoons butter, melted, plus more for buttering bowl and baking dish"}, {"type": "item", "text": "2 tablespoons granulated sugar"}, {"type": "item", "text": "½ teaspoon salt"}, {"type": "item", "text": "1 large egg"}, {"type": "subheader", "text": "Filling:"}, {"type": "item", "text": "2 cups pecans, roughly chopped"}, {"type": "item", "text": "1 cup packed dark brown sugar"}, {"type": "item", "text": "2 teaspoons ground cinnamon"}, {"type": "item", "text": "½ teaspoon salt"}, {"type": "item", "text": "1 stick (8 tablespoons) unsalted butter, melted"}, {"type": "subheader", "text": "Thick Cream Cheese Icing:"}, {"type": "item", "text": "4 ounces cream cheese, softened"}, {"type": "item", "text": "2 cups confectioners sugar"}, {"type": "item", "text": "¼ cups milk"}], "steps": [{"type": "subheader", "text": "For dough:"}, {"type": "step", "text": "Place yeast and 1 cup lukewarm water in bowl of stand mixer and whisk to combine. Fit the mixer with dough hook and add the flour, butter, granulated sugar, salt and egg. Knead on medium low speed until dough forms a ball and releases easily from sides of bowl, about four minutes."}, {"type": "step", "text": "Butter large bowl; transfer dough to bowl. Cover with towel and set aside in a warm draft free place until dough has doubled in size, about 1 ½ hours"}, {"type": "step", "text": "Preheat oven to 375 degrees. Butter 9x13 dish"}, {"type": "subheader", "text": "For Filling:"}, {"type": "step", "text": "In medium bowl stir together pecans, brown sugar, cinnamon, salt and butter. Set aside"}, {"type": "step", "text": "Punch down dough, then roll or press into a 16x12 inch rectangle on a lightly floured surface. Spread filling, leaving a ½ inch border"}, {"type": "step", "text": "Starting at one of the short ends, roll dough into a cylinder and slice into 12 rolls. Arrange rolls, cut side up, in four rows in prepared dish. Cover with clean kitchen towel and leave to rise in warm, draft free spot, until nearly doubled in size, about 45 minutes. Uncover and bake until golden on top. About 20 minutes"}, {"type": "subheader", "text": "For the thick cream cheese icing:"}, {"type": "step", "text": "Blend cream cheese and confectioners sugar in stand mixer fitted with paddle attachment. Add milk and mix until smooth. Top warm buns with icing and serve."}], "notes": []}, {"id": "no-bake-drop-cookies", "name": "No Bake Drop Cookies", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1 stick butter"}, {"type": "item", "text": "2 cups granulated sugar"}, {"type": "item", "text": "½ cup milk"}, {"type": "item", "text": "¼ cup cocoa powder"}, {"type": "item", "text": "1 cup peanut butter"}, {"type": "item", "text": "2 teaspoons vanilla"}, {"type": "item", "text": "3 cups quick oats"}, {"type": "item", "text": "¼ teaspoon salt"}], "steps": [{"type": "step", "text": "In large bowl put oats"}, {"type": "step", "text": "In sauce pan, add remaining ingredients"}, {"type": "step", "text": "Pour into oats"}, {"type": "step", "text": "Drop desired size cookies onto parchment"}, {"type": "step", "text": "Allow to cool completely before refrigerating"}], "notes": []}, {"id": "lemon-bars", "name": "Lemon Bars", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "subheader", "text": "For Crust:"}, {"type": "item", "text": "1¾ cup all purpose flour (spooned and leveled)"}, {"type": "item", "text": "¼ cup cornstarch"}, {"type": "item", "text": "½ cup granulated sugar"}, {"type": "item", "text": "¼ cup salt"}, {"type": "item", "text": "1 cup unsalted butter, softened"}, {"type": "subheader", "text": "For Filling:"}, {"type": "item", "text": "1½ cups granulated sugar"}, {"type": "item", "text": "¼ cup all purpose flour"}, {"type": "item", "text": "4 large eggs"}, {"type": "item", "text": "½ cup lemon juice"}], "steps": [{"type": "subheader", "text": "For crust:"}, {"type": "step", "text": "Preheat oven to 350*"}, {"type": "step", "text": "Line 9x13 pan with foil or parchment paper and spray with cooking spray"}, {"type": "step", "text": "In a large bowl whisk together flour, cornstarch, sugar, and salt"}, {"type": "step", "text": "Cube butter and add to bowl"}, {"type": "step", "text": "Mix with pastry cutter until crumbly"}, {"type": "step", "text": "Press into pan evenly"}, {"type": "step", "text": "Bake at 350 for 20-25 minutes or until edges are lightly golden brown*"}, {"type": "step", "text": "Remove and set aside"}, {"type": "subheader", "text": "For lemon filling:"}, {"type": "step", "text": "In large bowl whisk together sugar and flour"}, {"type": "step", "text": "Add eggs and lemon juice until combined"}, {"type": "step", "text": "Pour filling over crust and return to oven"}, {"type": "step", "text": "Bake at 350 for 18-22 minutes or until set*"}, {"type": "step", "text": "Remove and transfer to wire rack to cool for one hour"}, {"type": "step", "text": "Cover tightly and refrigerate for at least two hours"}, {"type": "step", "text": "Sift powdered sugar on top, and slice into bars"}], "notes": []}, {"id": "granola", "name": "Granola", "tags": [], "rating": 5.0, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "3 cups old fashioned oats"}, {"type": "item", "text": "½ teaspoon salt"}, {"type": "item", "text": "⅓ brown sugar"}, {"type": "item", "text": "⅓ cup butter"}, {"type": "item", "text": "⅓ honey"}, {"type": "item", "text": "1 teaspoon vanilla"}], "steps": [{"type": "step", "text": "Preheat oven to 250*"}, {"type": "step", "text": "Line baking sheet with parchment. Set aside"}, {"type": "step", "text": "Melt butter on medium bowl"}, {"type": "step", "text": "Add honey, brown sugar and vanilla"}, {"type": "step", "text": "In large bowl add oatmeal, salt and any other additions"}, {"type": "step", "text": "Stir in wet ingredients"}, {"type": "step", "text": "Spread onto baking sheet. Bake for 50 minutes, stirring every 15"}], "notes": ["Can add nuts, coconut flakes, seeds, fruits etc"]}, {"id": "strawberry-cobbler", "name": "Strawberry Cobbler", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": "8", "description": "", "ingredients": [{"type": "subheader", "text": "For filling:"}, {"type": "item", "text": "8 cups strawberries, quartered"}, {"type": "item", "text": "¾ cup granulated sugar"}, {"type": "item", "text": "2 tablespoons lemon juice"}, {"type": "item", "text": "1 tablespoon starch"}, {"type": "subheader", "text": "For topping:"}, {"type": "item", "text": "1½ cups all purpose flour"}, {"type": "item", "text": "⅓ cup granulated sugar"}, {"type": "item", "text": "⅓ cup brown sugar"}, {"type": "item", "text": "1½ teaspoons baking powder"}, {"type": "item", "text": "½ teaspoon salt"}, {"type": "item", "text": "1 stick butter, cubed"}, {"type": "item", "text": "⅓ cup boiling water"}, {"type": "subheader", "text": "Additional topping:"}, {"type": "item", "text": "1½ teaspoons granulated sugar"}], "steps": [{"type": "step", "text": "Preheat oven to 375 and spray 3 quart (8x8) baking dish with nonstick spray"}, {"type": "step", "text": "Place quartered strawberries in mixing bowl"}, {"type": "step", "text": "Sprinkle with sugar, lemon juice, and corn starch"}, {"type": "step", "text": "Pour into baking dish"}, {"type": "step", "text": "In medium bowl whisk together flour, sugar, brown sugar, baking powder, and salt"}, {"type": "step", "text": "Using pastry blender or fork, mix butter into flour mixture until crumbly"}, {"type": "step", "text": "Pour boiling water into flour mixture and stir until combined"}, {"type": "step", "text": "Spoon mixture over strawberries and spread gently"}, {"type": "step", "text": "Sprinkle additional sugar on top of batter"}, {"type": "step", "text": "Bake uncovered for 50-60 minutes or until topping is cooked thoroughly and started to brown"}, {"type": "step", "text": "Serve warm with vanilla ice cream or cool whip"}], "notes": []}, {"id": "burger-sauce", "name": "Burger Sauce", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "½ cup mayonnaise"}, {"type": "item", "text": "1 tablespoon ketchup"}, {"type": "item", "text": "1 tablespoon sriracha"}, {"type": "item", "text": "1 tablespoon Dijon mustard"}, {"type": "item", "text": "2 tablespoons dill relish"}, {"type": "item", "text": "1 teaspoon minced garlic"}, {"type": "item", "text": "¼ teaspoon onion powder"}, {"type": "item", "text": "¼ teaspoon smoked paprika"}, {"type": "item", "text": "¼ teaspoon salt"}, {"type": "item", "text": "¼ teaspoon black pepper"}], "steps": [{"type": "step", "text": "Mixed all ingredients in a bowl"}, {"type": "step", "text": "Cover and refrigerate for two hours for flavor to build"}], "notes": []}, {"id": "salted-butterscotch-pudding-pretzel-cookies", "name": "Salted Butterscotch Pudding Pretzel Cookies", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "2½ cups all purpose flour"}, {"type": "item", "text": "1½ teaspoons baking soda"}, {"type": "item", "text": "½ teaspoon salt"}, {"type": "item", "text": "1 cup butter, softened"}, {"type": "item", "text": "¾ granulated sugar"}, {"type": "item", "text": "¾ cup packed brown sugar"}, {"type": "item", "text": "1 box (4 serving size) butterscotch instant pudding and pie filling mix"}, {"type": "item", "text": "2 eggs"}, {"type": "item", "text": "1 teaspoon vanilla"}, {"type": "item", "text": "2 cups mini pretzel twists, coursely crushed"}, {"type": "item", "text": "1 cup semi sweet chocolate chips"}, {"type": "item", "text": "½ cup milk chocolate toffee bits"}, {"type": "item", "text": "1 teaspoon course sea salt"}], "steps": [{"type": "step", "text": "Heat oven to 350. In medium bowl mix flour, baking soda, and ½ teaspoon salt; set aside.*"}, {"type": "step", "text": "In large bowl beat softened butter, granulated sugar and brown sugar on medium speed for about one minute until fluffy; scrape sides. Beat in dry pudding mix. Beat in eggs, one at a time just until smooth. Stir in vanilla. On low speed, beat in flour mixture into sugar mixture until well blended. Stir in crushed pretzels, chocolate chips and toffee bits until blended."}, {"type": "step", "text": "Drop dough by rounded tablespoonfuls about 2 inches apart onto ungreased cookie sheet. Sprinkle each cookie lightly with course salt."}, {"type": "step", "text": "Bake 9 to 11 minutes or u Gil light brown. Cool 2 minutes; remove from cookie sheet to cooling rack. Cool completely, about 15 minutes. Store in airtight container at room temperature."}], "notes": []}, {"id": "jalape-o-cornbread", "name": "Jalapeño Cornbread", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "Cornbread mix"}, {"type": "item", "text": "½ cup cheddar cheese"}, {"type": "item", "text": "¼ cup cheddar cheese (for topping)"}, {"type": "item", "text": "1 fresh jalapeño seeded and diced (more if desired)"}], "steps": [{"type": "step", "text": "Prepare cornbread according to directions"}, {"type": "step", "text": "Add in cheese and jalapeños. Top with remaining cheese"}, {"type": "step", "text": "Bake according to cornbread directions"}], "notes": []}, {"id": "meringue-coconut-cookies", "name": "Meringue Coconut Cookies", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": "28", "description": "", "ingredients": [{"type": "item", "text": "3 egg whites"}, {"type": "item", "text": "¾ cup sugar"}, {"type": "item", "text": "¼ teaspoon cream of tartar"}, {"type": "item", "text": "1 cup sweetened coconut flakes"}, {"type": "item", "text": "¾ cup cornflake crumbs, from 2 cups cornflakes crushed almost to powder"}], "steps": [{"type": "step", "text": "Pre-heat oven to 350. Line cookie sheet with parchment paper"}, {"type": "step", "text": "Whip egg whites, cream of tartar, and sugar until thick soft peaks form, about 8-10 minutes"}, {"type": "step", "text": "Fold in coconut and cornflake crumbs"}, {"type": "step", "text": "Drop by spoonful onto parchment lined cookie sheet"}, {"type": "step", "text": "Bake about 18 minutes or until golden"}], "notes": []}, {"id": "chocolate-buttercream-frosting", "name": "Chocolate Buttercream Frosting", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1 pound powdered sugar"}, {"type": "item", "text": "½ cup unsweetened cocoa powder"}, {"type": "item", "text": "¼ teaspoon salt"}, {"type": "item", "text": "1 teaspoon vanilla"}, {"type": "item", "text": "2 sticks butter"}, {"type": "item", "text": "2 tablespoons milk or heavy cream (or up to ¼ cup)"}], "steps": [{"type": "step", "text": "Cream butter"}, {"type": "step", "text": "Add remaining ingredients gradually"}], "notes": []}, {"id": "samoa-poke-cake", "name": "Samoa Poke Cake", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "Butter cake mix (or vanilla or yellow mix)"}, {"type": "item", "text": "Sweetened condensed milk"}, {"type": "item", "text": "Carmel sauce (jar for sundaes)"}, {"type": "item", "text": "Coconut flakes"}, {"type": "item", "text": "Chocolate frosting"}], "steps": [{"type": "step", "text": "Make cake and poke holes"}, {"type": "step", "text": "Mix condensed milk and caramel sauce. Pour onto cake"}, {"type": "step", "text": "Chill for two hours"}, {"type": "step", "text": "Toast coconut. Cook on skillet for around 8 minutes"}, {"type": "step", "text": "Put warmed chocolate frosting on cake. (Microwave)"}, {"type": "step", "text": "Sprinkle coconut on cake"}, {"type": "step", "text": "Drizzle caramel"}], "notes": []}, {"id": "puppy-chow-muddy-buddies", "name": "Puppy Chow/Muddy Buddies", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1 cup semisweet chocolate chips"}, {"type": "item", "text": "½ cup peanut butter"}, {"type": "item", "text": "¼ cup butter"}, {"type": "item", "text": "1 teaspoon vanilla"}, {"type": "item", "text": "6 cups rice Chex cereal"}, {"type": "item", "text": "2 cups powdered sugar"}], "steps": [{"type": "step", "text": "Melt chocolate, peanut butter, butter and vanilla"}, {"type": "step", "text": "Add to Chex"}, {"type": "step", "text": "Add to bag of powdered sugar to coat"}, {"type": "subheader", "text": "Add-ins:"}, {"type": "step", "text": "M&ms"}, {"type": "step", "text": "Pretzels"}, {"type": "step", "text": "Mini Reese's cups"}, {"type": "step", "text": "Marshmallows"}, {"type": "step", "text": "Sprinkles"}, {"type": "step", "text": "Etc"}], "notes": []}, {"id": "peanut-brittle", "name": "Peanut Brittle", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "2 cups granulated sugar"}, {"type": "item", "text": "1 cup water"}, {"type": "item", "text": "1 cup light corn syrup"}, {"type": "item", "text": "3 cups roasted peanuts"}, {"type": "item", "text": "3 tablespoons butter"}, {"type": "item", "text": "1 teaspoon baking soda"}, {"type": "item", "text": "1½ teaspoons vanilla"}], "steps": [{"type": "step", "text": "Line two baking sheets with parchment paper"}, {"type": "step", "text": "Stir first three ingredients in heavy saucepan over medium heat until sugar dissolves. Increase heat to high and boil without stirring until candy thermometer registeres 260°, about 15-25 minutes. Do not let candy thermometer touch bottom of pan."}, {"type": "step", "text": "Reduce heat to medium low. Mix in peanuts and butter and cook until thermometer registers 300° Stirring constantly, about 10-12 minutes. Add baking soda and vanilla, stir briskly. Mixture will foam up."}, {"type": "step", "text": "Immediately pour onto parchment paper, divide evenly and as thinly as possible. Let stand until cold and hard. Break brittle into pieces. Store in airtight containers at room temperature"}], "notes": ["Use other roasted nuts if desired."]}, {"id": "toasted-pecans-or-any-nut", "name": "Toasted Pecans (or any nut)", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "Pecans"}, {"type": "item", "text": "Butter"}, {"type": "item", "text": "Salt"}], "steps": [{"type": "step", "text": "Preheat oven to 275°"}, {"type": "step", "text": "Toss pecans in melted butter. Just enough butter to coat nuts."}, {"type": "step", "text": "Spread evenly in single layer on baking sheet. Bake for 30-45 minutes, stirring every 10-15 minutes for even baking. When lightly brown and fragrant remove pan from oven"}, {"type": "step", "text": "Place nuts on paper towels to absorb excess butter. Sprinkle with salt to taste while still hot"}], "notes": ["Smaller nuts/pieces take less time. Whole nuts take longer."]}, {"id": "sausage-balls", "name": "Sausage Balls", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1 pound Jimmy Dean sausage"}, {"type": "item", "text": "1 (8 ounce) block cream cheese, softened"}, {"type": "item", "text": "1 ¼ cups Bisquick"}, {"type": "item", "text": "1 cup shredded block cheddar cheese"}], "steps": [{"type": "step", "text": "Preheat oven to 400°"}, {"type": "step", "text": "Mix all ingredients until well combined"}, {"type": "step", "text": "Roll into 1 inch balls and place on rimmed baking sheet"}, {"type": "step", "text": "Bake for 18-22 minutes"}], "notes": ["Can be frozen raw. Add extra time if frozen"]}, {"id": "not-yo-mama-s-banana-pudding", "name": "Not Yo' Mama's Banana Pudding", "tags": [], "rating": null, "sourceUrl": "http://www.pauladeen.com/not-yo-mamas-banana-pudding", "image": "images/not_yo39_mama39s_banana_pudding_top1w.jpg", "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1 (12 oz) container frozen whipped topping, thawed, or equal amount sweetened whipped cream"}, {"type": "item", "text": "1 (14 oz) can sweetened condensed milk"}, {"type": "item", "text": "1 (8 oz) package cream cheese, softened"}, {"type": "item", "text": "2 cups milk"}, {"type": "item", "text": "1 (5 oz) box instant French vanilla pudding mix"}, {"type": "item", "text": "6 to 8 bananas, sliced"}, {"type": "item", "text": "3 bags pepperidge farm chessmen cookies"}], "steps": [{"type": "step", "text": "Line the bottom of a 13x9x2-inch dish with 1 bag of cookies and layer bananas on top."}, {"type": "step", "text": "In a bowl, combine the milk and pudding mix and blend well using a handheld electric mixer. Using another bowl, combine the cream cheese and condensed milk together and mix until smooth. Fold the whipped topping into the cream cheese mixture. Add the cream cheese mixture to the pudding mixture and stir until well blended. Pour the mixture over the cookies and bananas and cover with the remaining cookies. Refrigerate until ready to serve."}], "notes": []}, {"id": "graham-cracker-pie-crust", "name": "Graham Cracker Pie Crust", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1½ cups graham crackers"}, {"type": "item", "text": "⅓ cup sugar"}, {"type": "item", "text": "6 tablespoons butter"}], "steps": [{"type": "step", "text": "Preheat oven to 375°"}, {"type": "step", "text": "Grease springform pan or pie plate"}, {"type": "step", "text": "Crush graham crackers"}, {"type": "step", "text": "Melt butter"}, {"type": "step", "text": "Mix all ingredients in medium bowl"}, {"type": "step", "text": "Press evenly into pan"}, {"type": "step", "text": "Bake 10 minutes"}], "notes": []}, {"id": "chicken-and-gnocchi-soup-olive-garden", "name": "Chicken and Gnocchi Soup (Olive Garden)", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": "8", "description": "", "ingredients": [{"type": "item", "text": "4 chicken breast, cooked and diced or shredded"}, {"type": "item", "text": "1 stalk celery, chopped"}, {"type": "item", "text": "½ White onion, diced"}, {"type": "item", "text": "2 teaspoons minced garlic"}, {"type": "item", "text": "½ Cup shredded carrots"}, {"type": "item", "text": "1 tablespoon olive oil"}, {"type": "item", "text": "4 cups chicken broth"}, {"type": "item", "text": "Salt and pepper, to taste"}, {"type": "item", "text": "1 teaspoon thyme"}, {"type": "item", "text": "16 ounces potato gnocchi"}, {"type": "item", "text": "1 cup heavy cream"}, {"type": "item", "text": "1 cup half and half"}, {"type": "item", "text": "1 cup fresh spinach"}], "steps": [{"type": "step", "text": "Heat olive oil in a large pot over medium heat. Add celery, onion, garlic, and carrots. Sauté for 2-3 minutes until onion is translucent."}, {"type": "step", "text": "Add chicken, chicken broth, salt, pepper, and thyme. Bring to boil."}, {"type": "step", "text": "Gently add gnocchi. Boil for 3-4 minutes longer."}, {"type": "step", "text": "Reduce heat to simmer, cook for 10 minutes."}, {"type": "step", "text": "Stir in cream and half and half, add spinach. Cook 1-2 minutes until spinach is tender."}, {"type": "step", "text": "Season, if needed. Serve."}], "notes": []}, {"id": "buttercream-frosting", "name": "Buttercream Frosting", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1 cup (2 sticks) unsalted butter"}, {"type": "item", "text": "16 ounces powdered sugar"}, {"type": "item", "text": "2 teaspoons vanilla extract"}, {"type": "item", "text": "Pinch of salt"}, {"type": "item", "text": "Milk as needed for consistency"}], "steps": [{"type": "step", "text": "Cream butter"}, {"type": "step", "text": "Add vanilla"}, {"type": "step", "text": "Add sugar one cup at a time"}, {"type": "step", "text": "Salt"}, {"type": "step", "text": "Milk as needed to thin"}], "notes": []}, {"id": "soy-marinated-eggs-for-ramen", "name": "Soy Marinated Eggs (for ramen)", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1 cup soy sauce"}, {"type": "item", "text": "1 cup water"}, {"type": "item", "text": "½ cup sugar"}, {"type": "item", "text": "½ Onion"}, {"type": "item", "text": "2 scallions"}, {"type": "item", "text": "1 tablespoon garlic"}, {"type": "item", "text": "2 jalapeños for spice"}], "steps": [{"type": "step", "text": "Boil eggs"}, {"type": "step", "text": "Put all remaining ingredients into container"}, {"type": "step", "text": "Peel eggs and place in container"}, {"type": "step", "text": "Marinate in fridge for a few hours minimum"}], "notes": []}, {"id": "texas-roadhouse-steak-rub", "name": "Texas Roadhouse Steak Rub", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "2 tablespoons kosher salt"}, {"type": "item", "text": "2 teaspoons brown sugar"}, {"type": "item", "text": "1 teaspoon freshly ground black pepper"}, {"type": "item", "text": "½ teaspoon paprika"}, {"type": "item", "text": "½ teaspoon chili powder"}, {"type": "item", "text": "¼ teaspoon garlic powder"}, {"type": "item", "text": "¼ teaspoon garlic salt"}, {"type": "item", "text": "¼ teaspoon onion powder"}, {"type": "item", "text": "¼ teaspoon turmeric"}], "steps": [{"type": "step", "text": "Combine all ingredients into spice jar"}], "notes": []}, {"id": "roasted-garlic-potatoes", "name": "Roasted Garlic Potatoes", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "3 pounds baby red potatoes, washed and quartered"}, {"type": "item", "text": "¼ cup olive oil"}, {"type": "item", "text": "6 large cloves of garlic, finely chopped or minced"}, {"type": "item", "text": "Salt and fresh cracked black pepper"}, {"type": "item", "text": "1 tablespoon Italian seasoning"}, {"type": "item", "text": "¾ cup fresh grated Parmesan cheese"}, {"type": "item", "text": "½ cup unsalted butter"}, {"type": "item", "text": "Fresh chopped parsley, for garnish"}, {"type": "item", "text": "½ cup crispy bacon bits (optional)"}], "steps": [{"type": "step", "text": "Preheat your oven to 400ºF. Grease a large baking sheet with non-stick spray or olive oil and set aside."}, {"type": "step", "text": "Parboil baby red potatoes in boiling water for 5 to 8 minutes to precook them. The potatoes will be more tender on the inside when roasting."}, {"type": "step", "text": "In a large bowl, combine 1/4 cup of olive oil, garlic, salt, herbs, pepper, and parmesan cheese together, mixing to combine. Add a little more olive oil if the parmesan cheese has absorbed most of it."}, {"type": "step", "text": "Toss parboiled potatoes through the garlic parmesan mixture to evenly coat."}, {"type": "step", "text": "Arrange the coated potatoes cut side down in a single layer onto the prepared baking sheet. Place the baking sheet on the bottom rack of the oven. Bake your garlic butter parmesan potatoes for 25 minutes, turning after 15 minutes with tongs or a spatula, until potatoes are browned and crisped at the edges."}, {"type": "step", "text": "In the meantime, gently melt butter in the microwave and combine with fresh chopped parsley. Remove the roasted potatoes from the oven, and drizzle with the butter parsley sauce. Add bacon bits, toss to coat well, and serve your roasted potatoes with garlic butter parmesan immediately."}], "notes": []}, {"id": "pasta-salad", "name": "Pasta Salad", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1 Box of cooked rotini pasta"}, {"type": "item", "text": "1 Box of cooked bow tie pasta"}, {"type": "item", "text": "1 bag of Diced ham"}, {"type": "item", "text": "1 bag of pepperoni, chopped (or a bag of the mini pepperoni)"}, {"type": "item", "text": "6oz bag of shredded Parmesan cheese"}, {"type": "item", "text": "1 bag of cubed cheese (whatever kind you like. I used Colby Jack)"}, {"type": "item", "text": "1 can of sliced black olives"}, {"type": "item", "text": "2 large tomatoes, diced"}, {"type": "item", "text": "2 cucumbers, seeded and diced"}, {"type": "item", "text": "16oz bottle of Italian dressing (sometimes I use olive garden dressing instead. Good either way)"}, {"type": "item", "text": "Salt and pepper to taste"}], "steps": [{"type": "step", "text": "Combine all ingredients."}], "notes": []}, {"id": "hawaiian-roll-sliders", "name": "Hawaiian Roll Sliders", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "24 pack Hawaiian rolls"}, {"type": "item", "text": "Landofrost 4 meat pack (any you like)"}, {"type": "item", "text": "Large deli pepperoni"}, {"type": "item", "text": "Any sliced cheese you like (have tried American white, velveeta, provolone.. all good)"}, {"type": "item", "text": "Mayonnaise"}, {"type": "item", "text": "6 tablespoons butter"}, {"type": "item", "text": "Salt"}, {"type": "item", "text": "Pepper"}, {"type": "item", "text": "Onion powder"}, {"type": "item", "text": "Garlic powder"}, {"type": "item", "text": "Italian seasoning"}], "steps": [{"type": "step", "text": "Preheat oven to 350"}, {"type": "step", "text": "Slice rolls open"}, {"type": "step", "text": "Spread mayo on top and bottom"}, {"type": "step", "text": "Place bottoms into greased 13x9 dish (I just spray enough pam on the bottom so bread doesn’t stick)"}, {"type": "step", "text": "Layer half the meat, add cheese, other half of meat, pepperoni"}, {"type": "step", "text": "Place tops back on"}, {"type": "subheader", "text": "In a small bowl melt together:"}, {"type": "step", "text": "Butter"}, {"type": "step", "text": "Salt"}, {"type": "step", "text": "Onion powder"}, {"type": "step", "text": "Garlic powder"}, {"type": "step", "text": "Italian seasoning"}, {"type": "step", "text": "Brush butter mixture on top of rolls"}, {"type": "step", "text": "Cover with foil"}, {"type": "step", "text": "Bake 30 minutes"}, {"type": "step", "text": "Remove foil, bake another 10"}], "notes": []}, {"id": "peanut-butter-balls", "name": "Peanut Butter Balls", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1 ½ cups creamy peanut butter"}, {"type": "item", "text": "½ cup butter, softened"}, {"type": "item", "text": "1 teaspoon vanilla"}, {"type": "item", "text": "3 cups powdered sugar"}, {"type": "item", "text": "12 oz bag of chocolate chips"}, {"type": "item", "text": "2 tablespoons coconut oil"}], "steps": [{"type": "step", "text": "Mix peanut butter, butter and vanilla in bowl."}, {"type": "step", "text": "Add powdered sugar 1 cup at a time. Will be thick and difficult to stir."}, {"type": "step", "text": "Line pan with wax paper. Roll mixture into 1 inch balls onto pan."}, {"type": "step", "text": "Melt chocolate and oil in double boiler (use a bowl inside a pot with simmering water)"}, {"type": "step", "text": "Drop balls one at a time in chocolate and place back on wax paper. Put in fridge to harden."}], "notes": []}, {"id": "change-your-life-salad", "name": "Change Your Life Salad", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "1 head iceberg lettuce"}, {"type": "item", "text": "1 lemon"}, {"type": "item", "text": "Olive oil"}, {"type": "item", "text": "1 Garlic clove"}, {"type": "item", "text": "Salt"}, {"type": "item", "text": "Pepper"}, {"type": "item", "text": "Vinegar"}], "steps": [{"type": "step", "text": "Shred lettuce"}, {"type": "step", "text": "Add juice of lemon"}, {"type": "step", "text": "Splash of olive oil"}, {"type": "step", "text": "Splash of vinegar"}, {"type": "step", "text": "Grated garlic clove"}, {"type": "step", "text": "Salt and pepper"}, {"type": "step", "text": "Enjoy!"}], "notes": []}, {"id": "chili", "name": "Chili", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "2+ pounds ground beef"}, {"type": "item", "text": "1 onion"}, {"type": "item", "text": "Kidney beans (red)"}, {"type": "item", "text": "Black beans"}, {"type": "item", "text": "Chili beans"}, {"type": "item", "text": "1 can tomato sauce"}, {"type": "item", "text": "1 big can diced tomatoes"}, {"type": "item", "text": "2 cans rotel with green chilis"}, {"type": "item", "text": "Chili seasoning"}, {"type": "item", "text": "Bay leaves"}], "steps": [{"type": "step", "text": "Cook ground beef"}, {"type": "step", "text": "Put in pot with all other ingredients"}, {"type": "step", "text": "Top with cheese"}, {"type": "step", "text": "Eat with crackers"}], "notes": []}, {"id": "chopped-italian-sandwich", "name": "Chopped Italian Sandwich", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "Pepperoni"}, {"type": "item", "text": "Salami"}, {"type": "item", "text": "Sliced Ham"}, {"type": "item", "text": "Banana peppers (sliced)"}, {"type": "item", "text": "Red onion"}, {"type": "item", "text": "Tomato"}, {"type": "item", "text": "Lettuce"}, {"type": "item", "text": "Provolone cheese"}, {"type": "item", "text": "Olive oil"}, {"type": "item", "text": "Red wine vinegar"}, {"type": "item", "text": "Hoagie/sub rolls"}], "steps": [{"type": "step", "text": "Chop all fillings together"}, {"type": "step", "text": "Put into hoagie or sub rolls"}], "notes": []}, {"id": "mississippi-pot-roast", "name": "Mississippi Pot Roast", "tags": [], "rating": null, "sourceUrl": null, "image": null, "yield": null, "description": "", "ingredients": [{"type": "item", "text": "2-3 pounds chuck roast"}, {"type": "item", "text": "1 packet ranch dressing mix"}, {"type": "item", "text": "1 packet au jus gravy mix"}, {"type": "item", "text": "1 stick butter sliced"}, {"type": "item", "text": "4-6 pepperoncinis + more for serving"}, {"type": "item", "text": "¼ cup pepperoncini juice or water"}], "steps": [{"type": "step", "text": "Place the chuck roast in the cooking vessel."}, {"type": "step", "text": "Sprinkle the ranch and au jus seasonings over it, then place the butter and pepperoncinis on top."}, {"type": "step", "text": "Pour the pepperoncini juice (or water) along the bottom of the dish (or water)."}, {"type": "step", "text": "INSTANT POT: Pour in additional broth (or water), close lid and set to 'sealing'. Cook on manual (high pressure) for 60 minutes, then natural pressure release for 15 minutes."}, {"type": "step", "text": "SLOW COOKER: Cover and cook on high 4-6 hours, or low 8 hours, or until roast shreds easily."}, {"type": "step", "text": "OVEN: Cover and cook at 275 degrees for about 4 hours, or until roast shreds easily."}, {"type": "step", "text": "Shred and serve in the meat juices with extra pepperocinis, if desired."}], "notes": []}];
+
+const STORAGE_KEY = "recipes.user.v1";
+
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => t.classList.remove("show"), 1800);
+}
+
+function normalizeTag(s) {
+  return (s || "").trim();
+}
+
+function slugify(s) {
+  return (s || "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "")
+    .slice(0, 80) || ("recipe-" + Math.random().toString(16).slice(2));
+}
+
+function loadUser() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) return parsed;
+  } catch (e) {}
+  return [];
+}
+
+function saveUser(list) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+}
+
+function mergeAll() {
+  const user = loadUser();
+  // user overrides base if same id
+  const byId = new Map();
+  for (const r of BASE) byId.set(r.id, r);
+  for (const r of user) byId.set(r.id, r);
+  return Array.from(byId.values());
+}
+
+let all = mergeAll();
+let selectedTags = new Set();
+let query = "";
+
+function recipeText(r) {
+  const parts = [
+    r.name, r.description, (r.tags||[]).join(" "),
+    ...(r.ingredients||[]).map(x => x.text || ""),
+    ...(r.steps||[]).map(x => x.text || ""),
+    ...(r.notes||[])
+  ];
+  return parts.join("\n").toLowerCase();
+}
+
+function getAllTags(recipes) {
+  const set = new Set();
+  for (const r of recipes) for (const t of (r.tags||[])) set.add(normalizeTag(t));
+  return Array.from(set).filter(Boolean).sort((a,b) => a.localeCompare(b));
+}
+
+function matches(r) {
+  if (selectedTags.size > 0) {
+    const rt = new Set((r.tags||[]).map(normalizeTag));
+    let ok = false;
+    for (const t of selectedTags) if (rt.has(t)) { ok = true; break; }
+    if (!ok) return false;
+  }
+  if (query) {
+    return recipeText(r).includes(query);
+  }
+  return true;
+}
+
+function renderTags() {
+  const wrap = document.getElementById("tagChips");
+  wrap.innerHTML = "";
+  const tags = getAllTags(all);
+  if (tags.length === 0) return;
+
+  const allChip = document.createElement("div");
+  allChip.className = "chip";
+  allChip.textContent = "All";
+  allChip.dataset.on = (selectedTags.size === 0) ? "true" : "false";
+  allChip.addEventListener("click", () => {
+    selectedTags = new Set();
+    render();
+  });
+  wrap.appendChild(allChip);
+
+  for (const t of tags) {
+    const chip = document.createElement("div");
+    chip.className = "chip";
+    chip.textContent = t;
+    chip.dataset.on = selectedTags.has(t) ? "true" : "false";
+    chip.addEventListener("click", () => {
+      if (selectedTags.has(t)) selectedTags.delete(t);
+      else selectedTags.add(t);
+      render();
+    });
+    wrap.appendChild(chip);
+  }
+}
+
+function render() {
+  all = mergeAll();
+  const list = document.getElementById("list");
+  const filtered = all.filter(matches).sort((a,b) => a.name.localeCompare(b.name));
+  list.innerHTML = "";
+
+  for (const r of filtered) {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const details = document.createElement("details");
+    details.open = false;
+
+    const summary = document.createElement("summary");
+    const top = document.createElement("div");
+    top.className = "cardTop";
+
+    const title = document.createElement("div");
+    title.className = "cardTitle";
+
+    const left = document.createElement("div");
+    const name = document.createElement("div");
+    name.className = "name";
+    name.textContent = r.name;
+    left.appendChild(name);
+
+    const sub = document.createElement("div");
+    sub.className = "sub";
+
+    if (r.yield) {
+      const b = document.createElement("span");
+      b.className = "badge";
+      b.textContent = "Servings: " + r.yield;
+      sub.appendChild(b);
+    }
+    if (typeof r.rating === "number") {
+      const b = document.createElement("span");
+      b.className = "badge";
+      b.textContent = "Rating: ★ " + r.rating.toFixed(0) + "/5";
+      sub.appendChild(b);
+    }
+    if (r.tags && r.tags.length) {
+      for (const t of r.tags.slice(0, 4)) {
+        const b = document.createElement("span");
+        b.className = "badge";
+        b.textContent = t;
+        sub.appendChild(b);
+      }
+      if (r.tags.length > 4) {
+        const b = document.createElement("span");
+        b.className = "badge";
+        b.textContent = "+" + (r.tags.length - 4);
+        sub.appendChild(b);
+      }
+    }
+    left.appendChild(sub);
+
+    const right = document.createElement("div");
+    right.className = "small";
+    right.textContent = "Tap to open";
+    title.appendChild(left);
+    title.appendChild(right);
+
+    top.appendChild(title);
+
+    if (r.description) {
+      const d = document.createElement("div");
+      d.className = "small";
+      d.textContent = r.description;
+      top.appendChild(d);
+    }
+
+    summary.appendChild(top);
+
+    const body = document.createElement("div");
+    body.className = "cardBody";
+
+    if (r.image) {
+      const sec = document.createElement("div");
+      sec.className = "section";
+      const img = document.createElement("img");
+      img.src = r.image;
+      img.alt = r.name;
+      img.style.width = "100%";
+      img.style.maxHeight = "220px";
+      img.style.objectFit = "cover";
+      img.style.borderRadius = "14px";
+      img.style.border = "1px solid var(--border)";
+      img.loading = "lazy";
+      img.onerror = () => img.remove();
+      sec.appendChild(img);
+      body.appendChild(sec);
+    }
+
+    if (r.sourceUrl) {
+      const sec = document.createElement("div");
+      sec.className = "section";
+      const h = document.createElement("h3");
+      h.textContent = "Source";
+      sec.appendChild(h);
+      const a = document.createElement("a");
+      a.href = r.sourceUrl;
+      a.textContent = r.sourceUrl;
+      a.target = "_blank";
+      a.rel = "noreferrer";
+      sec.appendChild(a);
+      body.appendChild(sec);
+    }
+
+    const ing = document.createElement("div");
+    ing.className = "section";
+    const hIng = document.createElement("h3");
+    hIng.textContent = "Ingredients";
+    ing.appendChild(hIng);
+
+    const ul = document.createElement("ul");
+    for (const it of (r.ingredients||[])) {
+      if (it.type === "subheader") {
+        const div = document.createElement("div");
+        div.className = "subheader";
+        div.textContent = it.text;
+        ing.appendChild(div);
+      } else {
+        const li = document.createElement("li");
+        li.textContent = it.text;
+        ul.appendChild(li);
+      }
+    }
+    ing.appendChild(ul);
+    body.appendChild(ing);
+
+    const st = document.createElement("div");
+    st.className = "section";
+    const hSt = document.createElement("h3");
+    hSt.textContent = "Steps";
+    st.appendChild(hSt);
+
+    const ol = document.createElement("ol");
+    for (const it of (r.steps||[])) {
+      if (it.type === "subheader") {
+        const div = document.createElement("div");
+        div.className = "subheader";
+        div.textContent = it.text;
+        st.appendChild(div);
+      } else {
+        const li = document.createElement("li");
+        li.textContent = it.text;
+        ol.appendChild(li);
+      }
+    }
+    st.appendChild(ol);
+    body.appendChild(st);
+
+    if (r.notes && r.notes.length) {
+      const nt = document.createElement("div");
+      nt.className = "section";
+      const hN = document.createElement("h3");
+      hN.textContent = "Notes";
+      nt.appendChild(hN);
+      const ulN = document.createElement("ul");
+      for (const n of r.notes) {
+        const li = document.createElement("li");
+        li.textContent = n;
+        ulN.appendChild(li);
+      }
+      nt.appendChild(ulN);
+      body.appendChild(nt);
+    }
+
+    const actions = document.createElement("div");
+    actions.className = "rowBtns";
+
+    const btnCopy = document.createElement("button");
+    btnCopy.type = "button";
+    btnCopy.textContent = "Copy";
+    btnCopy.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      openEditor(Object.assign({}, r, { id: slugify(r.name + "-copy") }), true);
+    });
+    actions.appendChild(btnCopy);
+
+    const userHas = loadUser().some(x => x.id === r.id);
+    const btnEdit = document.createElement("button");
+    btnEdit.type = "button";
+    btnEdit.textContent = userHas ? "Edit" : "Edit (save copy)";
+    btnEdit.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (userHas) openEditor(r, false);
+      else openEditor(Object.assign({}, r, { id: slugify(r.name + "-edit") }), true);
+    });
+    actions.appendChild(btnEdit);
+
+    if (userHas) {
+      const btnDel = document.createElement("button");
+      btnDel.type = "button";
+      btnDel.className = "danger";
+      btnDel.textContent = "Delete";
+      btnDel.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!confirm("Delete this recipe?")) return;
+        const user = loadUser().filter(x => x.id !== r.id);
+        saveUser(user);
+        toast("Deleted");
+        render();
+      });
+      actions.appendChild(btnDel);
+    }
+
+    const hr = document.createElement("hr");
+    hr.className = "sep";
+    body.appendChild(hr);
+    body.appendChild(actions);
+
+    details.appendChild(summary);
+    details.appendChild(body);
+    card.appendChild(details);
+    list.appendChild(card);
+  }
+
+  renderTags();
+  document.getElementById("resultsMeta").textContent =
+    `${filtered.length} of ${all.length} recipes` +
+    (selectedTags.size ? (` • Tags: ${Array.from(selectedTags).join(", ")}`) : " • No tag filter") +
+    (query ? (` • Search: "${query}"`) : "");
+}
+
+function openEditor(r = null, isNew = true) {
+  const dlg = document.getElementById("dlg");
+  document.getElementById("dlgTitle").textContent = isNew ? "Add Recipe" : "Edit Recipe";
+
+  const fId = document.getElementById("fId");
+  const fName = document.getElementById("fName");
+  const fTags = document.getElementById("fTags");
+  const fYield = document.getElementById("fYield");
+  const fSource = document.getElementById("fSource");
+  const fDesc = document.getElementById("fDesc");
+  const fIngredients = document.getElementById("fIngredients");
+  const fSteps = document.getElementById("fSteps");
+  const fNotes = document.getElementById("fNotes");
+
+  if (!r) {
+    fId.value = "";
+    fName.value = "";
+    fTags.value = "";
+    fYield.value = "";
+    fSource.value = "";
+    fDesc.value = "";
+    fIngredients.value = "";
+    fSteps.value = "";
+    fNotes.value = "";
+  } else {
+    fId.value = r.id || "";
+    fName.value = r.name || "";
+    fTags.value = (r.tags || []).join(", ");
+    fYield.value = r.yield || "";
+    fSource.value = r.sourceUrl || "";
+    fDesc.value = r.description || "";
+
+    const ingLines = (r.ingredients || []).map(x => x.text || "");
+    fIngredients.value = ingLines.join("\n");
+
+    const stepLines = (r.steps || []).map(x => x.text || "");
+    fSteps.value = stepLines.join("\n");
+
+    fNotes.value = (r.notes || []).join("\n");
+  }
+  dlg.showModal();
+}
+
+function parseLinesToItems(text) {
+  const lines = (text || "").split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+  const out = [];
+  for (const line of lines) {
+    if (/^.+:\s*$/.test(line)) out.push({type:"subheader", text: line.replace(/\s+$/,"")});
+    else out.push({type:"item", text: line});
+  }
+  return out;
+}
+
+function parseLinesToSteps(text) {
+  const lines = (text || "").split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+  const out = [];
+  for (const line of lines) {
+    if (/^.+:\s*$/.test(line)) out.push({type:"subheader", text: line.replace(/\s+$/,"")});
+    else out.push({type:"step", text: line});
+  }
+  return out;
+}
+
+document.getElementById("btnAdd").addEventListener("click", () => openEditor(null, true));
+document.getElementById("btnCancel").addEventListener("click", () => document.getElementById("dlg").close());
+
+document.getElementById("recipeForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const fId = document.getElementById("fId").value.trim();
+  const name = document.getElementById("fName").value.trim();
+  const tags = document.getElementById("fTags").value.split(",").map(normalizeTag).filter(Boolean);
+  const y = document.getElementById("fYield").value.trim();
+  const src = document.getElementById("fSource").value.trim();
+  const desc = document.getElementById("fDesc").value.trim();
+  const ingredients = parseLinesToItems(document.getElementById("fIngredients").value);
+  const steps = parseLinesToSteps(document.getElementById("fSteps").value);
+  const notes = document.getElementById("fNotes").value.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+
+  const id = fId || slugify(name);
+  const rec = {
+    id,
+    name,
+    tags,
+    yield: y || null,
+    sourceUrl: src || null,
+    description: desc || "",
+    ingredients,
+    steps,
+    notes,
+    image: null,
+    rating: null
+  };
+
+  const user = loadUser();
+  const idx = user.findIndex(x => x.id === id);
+  if (idx >= 0) user[idx] = rec;
+  else user.push(rec);
+
+  saveUser(user);
+  document.getElementById("dlg").close();
+  toast("Saved");
+  render();
+});
+
+document.getElementById("q").addEventListener("input", (e) => {
+  query = e.target.value.trim().toLowerCase();
+  render();
+});
+
+document.getElementById("btnReset").addEventListener("click", () => {
+  query = "";
+  selectedTags = new Set();
+  document.getElementById("q").value = "";
+  render();
+});
+
+document.getElementById("btnExport").addEventListener("click", async () => {
+  const payload = {
+    exportedAt: new Date().toISOString(),
+    userRecipes: loadUser()
+  };
+  const text = JSON.stringify(payload, null, 2);
+  try {
+    await navigator.clipboard.writeText(text);
+    toast("Export copied to clipboard");
+  } catch {
+    const blob = new Blob([text], {type:"application/json"});
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    toast("Export opened");
+  }
+});
+
+const dlgImport = document.getElementById("dlgImport");
+document.getElementById("btnImport").addEventListener("click", () => {
+  document.getElementById("importText").value = "";
+  dlgImport.showModal();
+});
+document.getElementById("btnImportCancel").addEventListener("click", () => dlgImport.close());
+
+document.getElementById("importForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const raw = document.getElementById("importText").value.trim();
+  if (!raw) { dlgImport.close(); return; }
+  try {
+    const parsed = JSON.parse(raw);
+    let incoming = [];
+    if (Array.isArray(parsed)) incoming = parsed;
+    else if (parsed && Array.isArray(parsed.userRecipes)) incoming = parsed.userRecipes;
+    else throw new Error("Unrecognized JSON format");
+
+    const user = loadUser();
+    const byId = new Map(user.map(x => [x.id, x]));
+    for (const r of incoming) {
+      if (!r || !r.name) continue;
+      const id = (r.id || slugify(r.name));
+      r.id = id;
+      byId.set(id, r);
+    }
+    saveUser(Array.from(byId.values()));
+    dlgImport.close();
+    toast("Imported");
+    render();
+  } catch (err) {
+    alert("Import failed: " + err.message);
+  }
+});
+
+render();
+</script>
+
+<!-- Built from CopyMeThat export on 2026-03-01 -->
+</body>
+</html>
